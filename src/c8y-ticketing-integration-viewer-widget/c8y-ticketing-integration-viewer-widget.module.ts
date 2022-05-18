@@ -42,7 +42,7 @@ import { HttpClientModule } from "@angular/common/http";
                 previewImage: require("@widget-assets/img-preview.png"),
                 data: {
                     ng1: {
-                        options: { noDeviceTarget: true, deviceTargetNotRequired: true },
+                        options: { noDeviceTarget: false, deviceTargetNotRequired: true },
                     },
                 },
             },

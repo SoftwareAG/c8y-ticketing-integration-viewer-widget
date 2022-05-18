@@ -16,9 +16,6 @@
 * limitations under the License. 
  */
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { IFetchOptions, IFetchResponse } from '@c8y/client';
-import { AlertService } from '@c8y/ngx-components';
-import { FetchClient } from '@c8y/ngx-components/api';
 import * as _ from 'lodash';
 
 @Component({
@@ -30,14 +27,53 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
 
     @Input() config: any = {};
 
-    constructor(private fetchClient: FetchClient, private alertService: AlertService) {}
+    public widgetConfig = {
+        showTickets: "table",
+        status: [],
+        showColumns: {
+           ticketId: true,
+           description: true,
+           creationDate: true,
+           lastUpdateDate: true,
+           status: true,
+           alarmId: true,
+           deviceId: true,
+           subject: true
+        }
+    };
+
+    constructor() {}
 
     ngOnInit(): void {
         try {
-            
+            // Editing an existing widget
+            if(_.has(this.config, 'customwidgetdata')) {
+                this.widgetConfig = _.get(this.config, 'customwidgetdata');
+            } else { // Adding a new widget
+                _.set(this.config, 'customwidgetdata', this.widgetConfig);
+                this.addStatus();
+            }
         } catch(e) {
-            this.alertService.danger("Ticketing Integration Viewer Widget Config - ngOnInit()", e);
+           console.log("Ticketing Integration Viewer Widget Config - ngOnInit(): " + e);
         }
+    }
+
+    public addStatus(): void {
+        this.widgetConfig.status.push({
+            id: '',
+            label: '',
+            tickets: []
+        });
+        this.updateConfig();
+    }
+
+    public deleteStatus(i: number): void {
+        this.widgetConfig.status.splice(i, 1);
+        this.updateConfig();
+    }
+    
+    public updateConfig() {
+        _.set(this.config, 'customwidgetdata', this.widgetConfig);
     }
 
     ngOnDestroy(): void {

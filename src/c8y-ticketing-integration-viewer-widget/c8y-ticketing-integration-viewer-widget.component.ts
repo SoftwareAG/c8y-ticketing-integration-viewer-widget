@@ -24,6 +24,7 @@ import { IFetchOptions, IFetchResponse } from '@c8y/client';
 import { AlertService } from '@c8y/ngx-components';
 import { FetchClient } from '@c8y/ngx-components/api';
 import * as _ from 'lodash';
+import { Ticket } from './ticket';
 
 
 @Component({
@@ -35,18 +36,63 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
 
     @Input() config;
 
+    public showTickets: string = "table";
+
+    public tickets: Ticket[];
+
     constructor(private fetchClient: FetchClient, private alertService: AlertService) {
     }
 
-    ngOnInit(): void {
-        this.initialise();
+    async ngOnInit(): Promise<void> {
+        try {
+            let deviceId = "";
+            if(this.config.device !== undefined) {
+                deviceId = this.config.device.id;
+            }
+            
+            this.showTickets = this.config.customwidgetdata.showTickets;
+            if(this.showTickets === undefined || this.showTickets === null || this.showTickets === "") {
+                throw new Error("showTickets is blank.");
+            }
+            if(this.showTickets === "table") {
+                this.tickets = await this.fetchTickets(deviceId);
+            } else {
+                let statusLength = this.config.customwidgetdata.status.length;
+                console.log(statusLength);
+                for(let i=0; i<statusLength; i++) {
+                    if(this.config.customwidgetdata.status[i].id === undefined || this.config.customwidgetdata.status[i].id === null || this.config.customwidgetdata.status[i].id === "") {
+                        throw new Error("Status id cannot be blank.");
+                    }
+                    if(this.config.customwidgetdata.status[i].label === undefined || this.config.customwidgetdata.status[i].label === null || this.config.customwidgetdata.status[i].label === "") {
+                        throw new Error("Status label cannot be blank.");
+                    }
+                    this.config.customwidgetdata.status[i].tickets = await this.fetchTickets(deviceId, this.config.customwidgetdata.status[i].id);                    
+                }
+            }
+        } catch(e) {
+            console.log("Ticketing Integration Viewer Widget - ngOnInit() "+e);
+        }
     }
 
-    private initialise(): void {
-        try {
-            
-        } catch(err) {
-            console.log("Ticketing Integration Viewer Widget - initialise() "+err);
+    private async fetchTickets(deviceId?: string, statusId?: string): Promise<Ticket[]> {
+        let url: string = "/service/ticketing/tickets";
+        if(deviceId !== undefined && deviceId !== null && deviceId !== "") {
+            url = url + "?deviceId="+deviceId;
+        }
+        if(statusId !== undefined && statusId !== null && statusId !== "") {
+            if(url.indexOf("?") > -1) {
+                url = url + "&statusId="+statusId;
+            } else {
+                url = url + "?statusId="+statusId;
+            }
+        }
+        let fetchResp: IFetchResponse = await this.fetchClient.fetch(url);
+        if(fetchResp.status === 200) {
+            let jsonResp = await fetchResp.json();
+            return jsonResp;
+        } else {
+            console.log("Ticketing Integration Viewer Widget - "+fetchResp.status);
+            return [];
         }
     }
 

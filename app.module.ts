@@ -37,7 +37,12 @@ import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-tick
         description: 'To configure',
         component: CumulocityTicketingIntegrationViewerWidget,
         configComponent: CumulocityTicketingIntegrationViewerWidgetConfig,
-        previewImage: require("@widget-assets/img-preview.png")
+        previewImage: require("@widget-assets/img-preview.png"),
+        data: {
+          ng1: {
+              options: { noDeviceTarget: false, deviceTargetNotRequired: true },
+          },
+        },
       }
     ]
   }],

@@ -1,110 +1,120 @@
 <div class="row">
     <div class="col-lg-12">
-        <div class="form-group">
-            <label>Show tickets</label>
-            <label class="c8y-radio radio-inline">
-              <input type="radio" name="show-tickets-radiogroup" [(ngModel)]="widgetConfig.showTickets" value="table" (change)="updateConfig()" />
-              <span></span>
-              <span>in a table</span>
-            </label>
-            <label class="c8y-radio radio-inline">
-              <input type="radio" name="show-tickets-radiogroup" [(ngModel)]="widgetConfig.showTickets" value="stats" (change)="updateConfig()" />
-              <span></span>
-              <span>statistics</span>
-            </label>
-          </div>
+        <fieldset>
+            <div class="legend form-block left">
+                Table customization
+            </div>
+            <label>Show columns</label>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.ticketId" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Ticket id</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.subject" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Subject</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.description" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Description</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.creationDate" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Creation date</span>
+                    </label>
+                </div>
+                <div class="col-lg-3">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.lastUpdateDate" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Last update date</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.status" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Status</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.priority" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Priority</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.alarmId" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Alarm id</span>
+                    </label>
+                </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.deviceId" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Device id</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Page size</label>
+                        <input type="number" class="form-control" [(ngModel)]="widgetConfig.table.pageSize" (change)="updateConfig()" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
     </div>
 </div>
 
-<ng-container *ngIf="widgetConfig.showTickets === 'table'">
-    <div class="row">
-        <div class="col-lg-12">
-            <label>Show columns</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.ticketId" (change)="updateConfig()" />
-                <span></span>
-                <span>Ticket id</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.subject" (change)="updateConfig()" />
-                <span></span>
-                <span>Subject</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.description" (change)="updateConfig()" />
-                <span></span>
-                <span>Description</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.creationDate" (change)="updateConfig()" />
-                <span></span>
-                <span>Creation date</span>
-            </label>
-        </div>
-        <div class="col-lg-3">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.lastUpdateDate" (change)="updateConfig()" />
-                <span></span>
-                <span>Last update date</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.status" (change)="updateConfig()" />
-                <span></span>
-                <span>Status</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.alarmId" (change)="updateConfig()" />
-                <span></span>
-                <span>Alarm id</span>
-            </label>
-        </div>
-        <div class="col-lg-2">
-            <label class="c8y-checkbox">
-                <input type="checkbox" [(ngModel)]="widgetConfig.showColumns.deviceId" (change)="updateConfig()" />
-                <span></span>
-                <span>Device id</span>
-            </label>
-        </div>
-    </div>
-</ng-container>
-
-<ng-container *ngIf="widgetConfig.showTickets === 'stats'">
-    <div class="row" *ngFor="let s of widgetConfig.status; let i=index">
-        <div class="col-lg-3">
-            <div class="form-group">
-                <label>Status id</label>
-                <input type="text" class="form-control" [(ngModel)]="s.id" required placeholder="e.g. 3" />
+<div class="row">
+    <div class="col-lg-12">
+        <fieldset>
+            <div class="legend form-block left">
+                Chart customization
             </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="form-group">
-                <label>Status label</label>
-                <input type="text" class="form-control" [(ngModel)]="s.label" required placeholder="e.g. In progress" />
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="c8y-checkbox">
+                            <input type="checkbox" [(ngModel)]="widgetConfig.chart.show" (change)="updateConfig()" />
+                            <span></span>
+                            <span>Show charts</span>
+                        </label>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-1">
-            <button class="btn btn-clean btn-icon" style="margin-top: 28px; font-size: 20px;" (click)="deleteStatus(i)">
-                <i class="c8y-icon c8y-icon-waste-bin"></i>
-            </button>
-        </div>
+            <ng-container *ngIf="widgetConfig.chart.show">
+                <div class="row">
+                    <div class="col-lg-2" *ngFor="let chart of widgetConfig.chart.colors; let i=index; trackBy: trackByFn">
+                        <div class="form-group">
+                            <label>Chart color #{{i+1}}</label>
+                            <input type="color" class="form-control" [(ngModel)]="widgetConfig.chart.colors[i]" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button class="btn btn-default" (click)="addChartColor()">Add color</button>
+                        <button class="btn btn-default" (click)="removeChartColor()">Remove color</button>
+                    </div>
+                </div>
+            </ng-container>
+        </fieldset>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <button class="btn btn-default" (click)="addStatus()">Add status</button>
-        </div>
-    </div>
-</ng-container>
+</div>

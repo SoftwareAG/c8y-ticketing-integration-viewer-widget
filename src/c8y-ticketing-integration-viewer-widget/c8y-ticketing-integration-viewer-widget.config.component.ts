@@ -28,17 +28,23 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
     @Input() config: any = {};
 
     public widgetConfig = {
-        showTickets: "table",
-        status: [],
-        showColumns: {
-           ticketId: true,
-           description: true,
-           creationDate: true,
-           lastUpdateDate: true,
-           status: true,
-           alarmId: true,
-           deviceId: true,
-           subject: true
+        table: {
+            showColumns: {
+                ticketId: true,
+                description: true,
+                creationDate: true,
+                lastUpdateDate: true,
+                status: true,
+                alarmId: true,
+                deviceId: true,
+                subject: true,
+                priority: true
+            },
+            pageSize: 1
+        },
+        chart: {
+            show: true,
+            colors: ["#1776bf"]
         }
     };
 
@@ -51,29 +57,28 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
                 this.widgetConfig = _.get(this.config, 'customwidgetdata');
             } else { // Adding a new widget
                 _.set(this.config, 'customwidgetdata', this.widgetConfig);
-                this.addStatus();
             }
         } catch(e) {
            console.log("Ticketing Integration Viewer Widget Config - ngOnInit(): " + e);
         }
     }
 
-    public addStatus(): void {
-        this.widgetConfig.status.push({
-            id: '',
-            label: '',
-            tickets: []
-        });
+    public addChartColor(): void {
+        this.widgetConfig.chart.colors.push("#1776bf");
         this.updateConfig();
     }
 
-    public deleteStatus(i: number): void {
-        this.widgetConfig.status.splice(i, 1);
+    public removeChartColor(): void {
+        this.widgetConfig.chart.colors.pop();
         this.updateConfig();
     }
     
     public updateConfig() {
         _.set(this.config, 'customwidgetdata', this.widgetConfig);
+    }
+
+    trackByFn(index, item) {
+        return index;  
     }
 
     ngOnDestroy(): void {

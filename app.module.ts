@@ -10,6 +10,8 @@ import { ReportsModule } from "@c8y/ngx-components/reports";
 import { SensorPhoneModule } from "@c8y/ngx-components/sensor-phone";
 import { CumulocityTicketingIntegrationViewerWidget } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.component';
 import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.config.component';
+import { ChartsModule, ThemeService } from "ng2-charts";
+import { PaginationModule } from "ngx-bootstrap/pagination";
 
 @NgModule({
   imports: [
@@ -24,6 +26,8 @@ import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-tick
         CockpitDashboardModule,
         SensorPhoneModule,
         UpgradeModule,
+        ChartsModule,
+        PaginationModule
   ],
   declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig],
   entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig],
@@ -45,7 +49,7 @@ import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-tick
         },
       }
     ]
-  }],
+  }, ThemeService],
 })
 export class AppModule extends HybridAppModule {
   constructor(protected upgrade: NgUpgradeModule) {

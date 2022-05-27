@@ -19,4 +19,4 @@
  * @format
  */
 
-export { CumulocityTicketingIntegrationSetupWidgetModule } from "./c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.module";
+export { CumulocityTicketingIntegrationViewerWidgetModule } from "./c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.module";

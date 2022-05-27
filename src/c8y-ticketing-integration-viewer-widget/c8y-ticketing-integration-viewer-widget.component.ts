@@ -23,7 +23,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IFetchOptions, IFetchResponse } from '@c8y/client';
 import { AlertService } from '@c8y/ngx-components';
 import { FetchClient } from '@c8y/ngx-components/api';
+import { Chart } from 'chart.js';
 import * as _ from 'lodash';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { Ticket } from './ticket';
 
 
@@ -36,64 +38,142 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
 
     @Input() config;
 
-    public showTickets: string = "table";
+    public tickets: Ticket[] = [];
+    public paginatedTickets: Ticket[] = [];
+    public totalTicketsPerPage: number = 1;
 
-    public tickets: Ticket[];
+    private countByStatusLabels: string[] = [];
+    private countByStatusDatapoints: number[] = []
+
+    private countByPriorityLabels: string[] = [];
+    private countByPriorityDatapoints: number[]= [];
+
+    private chartColors = [];
 
     constructor(private fetchClient: FetchClient, private alertService: AlertService) {
     }
 
-    async ngOnInit(): Promise<void> {
+    ngOnInit() {
         try {
             let deviceId = "";
             if(this.config.device !== undefined) {
                 deviceId = this.config.device.id;
             }
-            
-            this.showTickets = this.config.customwidgetdata.showTickets;
-            if(this.showTickets === undefined || this.showTickets === null || this.showTickets === "") {
-                throw new Error("showTickets is blank.");
-            }
-            if(this.showTickets === "table") {
-                this.tickets = await this.fetchTickets(deviceId);
-            } else {
-                let statusLength = this.config.customwidgetdata.status.length;
-                console.log(statusLength);
-                for(let i=0; i<statusLength; i++) {
-                    if(this.config.customwidgetdata.status[i].id === undefined || this.config.customwidgetdata.status[i].id === null || this.config.customwidgetdata.status[i].id === "") {
-                        throw new Error("Status id cannot be blank.");
-                    }
-                    if(this.config.customwidgetdata.status[i].label === undefined || this.config.customwidgetdata.status[i].label === null || this.config.customwidgetdata.status[i].label === "") {
-                        throw new Error("Status label cannot be blank.");
-                    }
-                    this.config.customwidgetdata.status[i].tickets = await this.fetchTickets(deviceId, this.config.customwidgetdata.status[i].id);                    
-                }
-            }
+            this.totalTicketsPerPage = this.config.customwidgetdata.table.pageSize;
+            this.chartColors = this.config.customwidgetdata.chart.colors;
+            this.fetchTickets(deviceId);
         } catch(e) {
             console.log("Ticketing Integration Viewer Widget - ngOnInit() "+e);
         }
     }
 
-    private async fetchTickets(deviceId?: string, statusId?: string): Promise<Ticket[]> {
+    private fetchTickets(deviceId?: string, statusId?: string): void {
         let url: string = "/service/ticketing/tickets";
         if(deviceId !== undefined && deviceId !== null && deviceId !== "") {
             url = url + "?deviceId="+deviceId;
         }
-        if(statusId !== undefined && statusId !== null && statusId !== "") {
-            if(url.indexOf("?") > -1) {
-                url = url + "&statusId="+statusId;
+        let fetchResp: Promise<IFetchResponse> = this.fetchClient.fetch(url);
+        fetchResp.then((resp: IFetchResponse) => {
+            if(resp.status === 200) {
+                resp.json().then((jsonResp) => {
+                    this.tickets = jsonResp;
+                    this.paginatedTickets = jsonResp.slice(0, this.totalTicketsPerPage);
+
+                    if(this.config.customwidgetdata.chart.show) {
+                        this.tickets.forEach((ticket) => {
+                            let statusFoundIndex = this.findEntryInStatus(ticket.status);
+                            if(statusFoundIndex === -1) {
+                                this.countByStatusLabels.push(ticket.status);
+                                this.countByStatusDatapoints.push(1);
+                            } else {
+                                this.countByStatusDatapoints[statusFoundIndex] = this.countByStatusDatapoints[statusFoundIndex] + 1;
+                            }
+    
+                            let priorityFoundIndex = this.findEntryInPriority(ticket.priority);
+                            if(priorityFoundIndex === -1) {
+                                this.countByPriorityLabels.push(ticket.priority);
+                                this.countByPriorityDatapoints.push(1);
+                            } else {
+                                this.countByPriorityDatapoints[priorityFoundIndex] = this.countByPriorityDatapoints[priorityFoundIndex] + 1;
+                            }
+                        });
+                       
+                        this.showPriorityChart();
+                        this.showStatusChart();
+                    }
+                }).catch((err) => {
+                    console.log("Ticketing Integration Viewer Widget - "+err);
+                });
             } else {
-                url = url + "?statusId="+statusId;
+                console.log("Ticketing Integration Viewer Widget - "+resp.status);
+            }
+        }).catch((err) => {
+            console.log("Ticketing Integration Viewer Widget - "+err);
+        });
+    }
+
+    public ticketsPageChanged(event: PageChangedEvent): void {
+        const startItem = (event.page - 1) * this.totalTicketsPerPage;
+        const endItem = event.page * this.totalTicketsPerPage;
+        this.paginatedTickets = this.tickets.slice(startItem, endItem);
+    }
+
+    private showPriorityChart() {
+        new Chart("priorityChart", {
+            type: "pie",
+            data: {
+                labels: this.countByPriorityLabels,
+                datasets: [{
+                    data: this.countByPriorityDatapoints,
+                    backgroundColor: this.chartColors
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                }
+            }
+        });
+    }
+
+    private findEntryInStatus(status: string): number {
+        let foundIndex: number = -1;
+        for(let i=0; i<this.countByStatusLabels.length; i++) {
+            if(status === this.countByStatusLabels[i]) {
+                foundIndex = i;
+                break;
             }
         }
-        let fetchResp: IFetchResponse = await this.fetchClient.fetch(url);
-        if(fetchResp.status === 200) {
-            let jsonResp = await fetchResp.json();
-            return jsonResp;
-        } else {
-            console.log("Ticketing Integration Viewer Widget - "+fetchResp.status);
-            return [];
+        return foundIndex;
+    }
+
+    private findEntryInPriority(priority: string): number {
+        let foundIndex: number = -1;
+        for(let i=0; i<this.countByPriorityLabels.length; i++) {
+            if(priority === this.countByPriorityLabels[i]) {
+                foundIndex = i;
+                break;
+            }
         }
+        return foundIndex;
+    }
+
+    private showStatusChart() {
+        new Chart("statusChart", {
+            type: "pie",
+            data: {
+                labels: this.countByStatusLabels,
+                datasets: [{
+                    data: this.countByStatusDatapoints,
+                    backgroundColor: this.chartColors
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                }
+            }
+        });
     }
 
 }

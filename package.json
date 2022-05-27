@@ -1,6 +1,6 @@
 {
     "name": "c8y-ticketing-integration-viewer-widget",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -28,7 +28,10 @@
         "@c8y/ngx-components": "1010.0.8",
         "@c8y/style": "1010.0.8",
         "angular": "1.6.9",
+        "chart.js": "2.9.4",
         "core-js": "3.4.0",
+        "ng2-charts": "2.4.2",
+        "ngx-bootstrap": "5.6.2",
         "rxjs": "6.4.0",
         "url-search-params-polyfill": "6.0.0",
         "zone.js": "0.9.1"
@@ -45,7 +48,7 @@
         "gulp-filter": "6.0.0",
         "gulp-replace": "1.0.0",
         "gulp-zip": "5.0.2",
-        "ng-packagr": "~9.1.5",
+        "ng-packagr": "9.1.5",
         "typescript": "3.5.3",
         "url-loader": "4.1.1",
         "webpack": "4.43.0",
@@ -68,7 +71,7 @@
         "cli": {}
     },
     "interleave": {
-        "dist\\bundle-src\\custom-widget.js": "c8y-ticketing-integration-setup-widget-CustomWidget",
-        "dist/bundle-src/custom-widget.js": "c8y-ticketing-integration-setup-widget-CustomWidget"
+        "dist\\bundle-src\\custom-widget.js": "c8y-ticketing-integration-viewer-widget-CustomWidget",
+        "dist/bundle-src/custom-widget.js": "c8y-ticketing-integration-viewer-widget-CustomWidget"
     }
 }

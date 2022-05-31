@@ -38,7 +38,8 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
                 alarmId: true,
                 deviceId: true,
                 subject: true,
-                priority: true
+                priority: true,
+                comments: true
             },
             pageSize: 1
         },

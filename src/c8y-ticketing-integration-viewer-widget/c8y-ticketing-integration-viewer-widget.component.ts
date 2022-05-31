@@ -19,13 +19,15 @@
  * @format
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IFetchOptions, IFetchResponse } from '@c8y/client';
 import { AlertService } from '@c8y/ngx-components';
 import { FetchClient } from '@c8y/ngx-components/api';
 import { Chart } from 'chart.js';
 import * as _ from 'lodash';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { TicketCommentModal } from './modal/ticket-comment-modal.component';
 import { Ticket } from './ticket';
 
 
@@ -50,7 +52,7 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
 
     private chartColors = [];
 
-    constructor(private fetchClient: FetchClient, private alertService: AlertService) {
+    constructor(private fetchClient: FetchClient, private alertService: AlertService, public modalService: BsModalService) {
     }
 
     ngOnInit() {
@@ -173,6 +175,27 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
                     display: false
                 }
             }
+        });
+    }
+
+    public showTicketComments(ticket: Ticket) {
+        let url = "/service/ticketing/tickets/"+ticket.id+"/comments";
+        let fetchResp: Promise<IFetchResponse> = this.fetchClient.fetch(url);
+        fetchResp.then((resp: IFetchResponse) => {
+            if(resp.status === 200) {
+                resp.json().then((jsonResp) => {
+                    let message = {
+                        comments: jsonResp
+                    };
+                    this.modalService.show(TicketCommentModal, { class: 'c8y-wizard', initialState: {message} });
+                }).catch((err) => {
+                    console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments JSON response: " + err);
+                });
+            } else {
+                console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments: " + resp.status);
+            }
+        }).catch((err) => {
+            console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments: " + err);
         });
     }
 

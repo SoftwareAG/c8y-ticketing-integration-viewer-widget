@@ -10,8 +10,10 @@ import { ReportsModule } from "@c8y/ngx-components/reports";
 import { SensorPhoneModule } from "@c8y/ngx-components/sensor-phone";
 import { CumulocityTicketingIntegrationViewerWidget } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.component';
 import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.config.component';
-import { ChartsModule, ThemeService } from "ng2-charts";
+import { ChartsModule } from "ng2-charts";
 import { PaginationModule } from "ngx-bootstrap/pagination";
+import { TicketCommentModal } from "./src/c8y-ticketing-integration-viewer-widget/modal/ticket-comment-modal.component";
+import { ModalModule } from "ngx-bootstrap/modal";
 
 @NgModule({
   imports: [
@@ -27,10 +29,11 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
         SensorPhoneModule,
         UpgradeModule,
         ChartsModule,
-        PaginationModule
+        PaginationModule,
+        ModalModule
   ],
-  declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig],
-  entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig],
+  declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
+  entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
   providers: [{
     provide: HOOK_COMPONENTS,
     multi: true,
@@ -49,7 +52,7 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
         },
       }
     ]
-  }, ThemeService],
+  }],
 })
 export class AppModule extends HybridAppModule {
   constructor(protected upgrade: NgUpgradeModule) {

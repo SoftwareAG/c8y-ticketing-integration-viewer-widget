@@ -69,6 +69,13 @@
                         <span>Device id</span>
                     </label>
                 </div>
+                <div class="col-lg-2">
+                    <label class="c8y-checkbox">
+                        <input type="checkbox" [(ngModel)]="widgetConfig.table.showColumns.comments" (change)="updateConfig()" />
+                        <span></span>
+                        <span>Comments</span>
+                    </label>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-6">

@@ -14,10 +14,11 @@
                         <th *ngIf="config.customwidgetdata.table.showColumns.priority">Priority</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.alarmId">Alarm id</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.deviceId">Device id</th>
+                        <th *ngIf="config.customwidgetdata.table.showColumns.comments" >Comments</th>
                     </tr>
                 </thead>
                 <tbody>                
-                    <tr *ngFor="let t of paginatedTickets">
+                    <tr *ngFor="let t of paginatedTickets;">
                         <td data-label="Ticket id" *ngIf="config.customwidgetdata.table.showColumns.ticketId">{{t.id}}</td>
                         <td data-label="Subject" *ngIf="config.customwidgetdata.table.showColumns.subject">{{t.subject}}</td>
                         <td data-label="Description" *ngIf="config.customwidgetdata.table.showColumns.description">{{t.description}}</td>
@@ -27,6 +28,7 @@
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.priority">{{t.priority}}</td>
                         <td data-label="Alarm id" *ngIf="config.customwidgetdata.table.showColumns.alarmId">{{t.alarmId}}</td>
                         <td data-label="Device id" *ngIf="config.customwidgetdata.table.showColumns.deviceId">{{t.deviceId}}</td>
+                        <td data-label="Comments" *ngIf="config.customwidgetdata.table.showColumns.comments"><button class="btn btn-default" (click)="showTicketComments(t)">View</button></td>
                     </tr>
                 </tbody>
             </table>

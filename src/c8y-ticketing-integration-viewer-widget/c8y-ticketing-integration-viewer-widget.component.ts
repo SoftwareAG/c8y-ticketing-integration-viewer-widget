@@ -121,7 +121,7 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
     }
 
     private showPriorityChart() {
-        new Chart("priorityChart", {
+        new Chart("ticketsByPriorityChart", {
             type: "pie",
             data: {
                 labels: this.countByPriorityLabels,
@@ -161,7 +161,7 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
     }
 
     private showStatusChart() {
-        new Chart("statusChart", {
+        new Chart("ticketsByStatusChart", {
             type: "pie",
             data: {
                 labels: this.countByStatusLabels,

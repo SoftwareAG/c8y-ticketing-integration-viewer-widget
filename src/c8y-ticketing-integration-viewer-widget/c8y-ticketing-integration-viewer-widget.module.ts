@@ -24,13 +24,12 @@ import { CumulocityTicketingIntegrationViewerWidgetConfig } from "./c8y-ticketin
 import { CumulocityTicketingIntegrationViewerWidget } from "./c8y-ticketing-integration-viewer-widget.component";
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
-import { ChartsModule } from "ng2-charts";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { TicketCommentModal } from "./modal/ticket-comment-modal.component";
 import { ModalModule } from "ngx-bootstrap/modal";
 
 @NgModule({
-    imports: [CoreModule, HttpClientModule, ChartsModule, PaginationModule, ModalModule],
+    imports: [CoreModule, HttpClientModule, PaginationModule, ModalModule],
     declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
     entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
     providers: [

@@ -12,6 +12,7 @@
                         <th *ngIf="config.customwidgetdata.table.showColumns.lastUpdateDate">Last update date</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.status">Status</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.priority">Priority</th>
+                        <th *ngIf="config.customwidgetdata.table.showColumns.owner">Owner</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.alarmId">Alarm id</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.deviceId">Device id</th>
                         <th *ngIf="config.customwidgetdata.table.showColumns.comments" >Comments</th>
@@ -26,8 +27,9 @@
                         <td data-label="Last update date" *ngIf="config.customwidgetdata.table.showColumns.lastUpdateDate">{{t.lastUpdateDate}}</td>
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.status">{{t.status}}</td>
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.priority">{{t.priority}}</td>
+                        <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.owner">{{t.owner}}</td>
                         <td data-label="Alarm id" *ngIf="config.customwidgetdata.table.showColumns.alarmId">{{t.alarmId}}</td>
-                        <td data-label="Device id" *ngIf="config.customwidgetdata.table.showColumns.deviceId">{{t.deviceId}}</td>
+                        <td data-label="Device id" *ngIf="config.customwidgetdata.table.showColumns.deviceId"><a click="device-link" (click)="redirectToDevicePage(t.deviceId)">{{t.deviceId}}</a></td>
                         <td data-label="Comments" *ngIf="config.customwidgetdata.table.showColumns.comments"><button class="btn btn-default" (click)="showTicketComments(t)">View</button></td>
                     </tr>
                 </tbody>
@@ -35,18 +37,5 @@
             <pagination [totalItems]="tickets.length" previousText=" "   
             nextText=" " [itemsPerPage]="totalTicketsPerPage" (pageChanged)="ticketsPageChanged($event)"></pagination>
         </div>
-        <!-- SHOW CHARTS -->
-        <ng-container *ngIf="config.customwidgetdata.chart.show">
-            <div>
-                <div style="margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;">Tickets by priority</h4>
-                    <canvas id="ticketsByPriorityChart"></canvas>
-                </div>
-                <div>
-                    <h4 style="margin-bottom: 15px;">Tickets by status</h4>
-                    <canvas id="ticketsByStatusChart"></canvas>
-                </div>
-            </div>
-        </ng-container>
     </div>
 </div>

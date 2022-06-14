@@ -19,13 +19,12 @@
  * @format
  */
 
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { IFetchOptions, IFetchResponse } from '@c8y/client';
+import { Component, Input, OnInit } from '@angular/core';
+import { IFetchResponse } from '@c8y/client';
 import { AlertService } from '@c8y/ngx-components';
 import { FetchClient } from '@c8y/ngx-components/api';
-import { Chart } from 'chart.js';
 import * as _ from 'lodash';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { TicketCommentModal } from './modal/ticket-comment-modal.component';
 import { Ticket } from './ticket';
@@ -44,14 +43,6 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
     public paginatedTickets: Ticket[] = [];
     public totalTicketsPerPage: number = 1;
 
-    private countByStatusLabels: string[] = [];
-    private countByStatusDatapoints: number[] = []
-
-    private countByPriorityLabels: string[] = [];
-    private countByPriorityDatapoints: number[]= [];
-
-    private chartColors = [];
-
     constructor(private fetchClient: FetchClient, private alertService: AlertService, public modalService: BsModalService) {
     }
 
@@ -62,14 +53,13 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
                 deviceId = this.config.device.id;
             }
             this.totalTicketsPerPage = this.config.customwidgetdata.table.pageSize;
-            this.chartColors = this.config.customwidgetdata.chart.colors;
             this.fetchTickets(deviceId);
         } catch(e) {
             console.log("Ticketing Integration Viewer Widget - ngOnInit() "+e);
         }
     }
 
-    private fetchTickets(deviceId?: string, statusId?: string): void {
+    private fetchTickets(deviceId?: string): void {
         let url: string = "/service/ticketing/tickets";
         if(deviceId !== undefined && deviceId !== null && deviceId !== "") {
             url = url + "?deviceId="+deviceId;
@@ -80,29 +70,6 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
                 resp.json().then((jsonResp) => {
                     this.tickets = jsonResp;
                     this.paginatedTickets = jsonResp.slice(0, this.totalTicketsPerPage);
-
-                    if(this.config.customwidgetdata.chart.show) {
-                        this.tickets.forEach((ticket) => {
-                            let statusFoundIndex = this.findEntryInStatus(ticket.status);
-                            if(statusFoundIndex === -1) {
-                                this.countByStatusLabels.push(ticket.status);
-                                this.countByStatusDatapoints.push(1);
-                            } else {
-                                this.countByStatusDatapoints[statusFoundIndex] = this.countByStatusDatapoints[statusFoundIndex] + 1;
-                            }
-    
-                            let priorityFoundIndex = this.findEntryInPriority(ticket.priority);
-                            if(priorityFoundIndex === -1) {
-                                this.countByPriorityLabels.push(ticket.priority);
-                                this.countByPriorityDatapoints.push(1);
-                            } else {
-                                this.countByPriorityDatapoints[priorityFoundIndex] = this.countByPriorityDatapoints[priorityFoundIndex] + 1;
-                            }
-                        });
-                       
-                        this.showPriorityChart();
-                        this.showStatusChart();
-                    }
                 }).catch((err) => {
                     console.log("Ticketing Integration Viewer Widget - "+err);
                 });
@@ -118,64 +85,6 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
         const startItem = (event.page - 1) * this.totalTicketsPerPage;
         const endItem = event.page * this.totalTicketsPerPage;
         this.paginatedTickets = this.tickets.slice(startItem, endItem);
-    }
-
-    private showPriorityChart() {
-        new Chart("ticketsByPriorityChart", {
-            type: "pie",
-            data: {
-                labels: this.countByPriorityLabels,
-                datasets: [{
-                    data: this.countByPriorityDatapoints,
-                    backgroundColor: this.chartColors
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                }
-            }
-        });
-    }
-
-    private findEntryInStatus(status: string): number {
-        let foundIndex: number = -1;
-        for(let i=0; i<this.countByStatusLabels.length; i++) {
-            if(status === this.countByStatusLabels[i]) {
-                foundIndex = i;
-                break;
-            }
-        }
-        return foundIndex;
-    }
-
-    private findEntryInPriority(priority: string): number {
-        let foundIndex: number = -1;
-        for(let i=0; i<this.countByPriorityLabels.length; i++) {
-            if(priority === this.countByPriorityLabels[i]) {
-                foundIndex = i;
-                break;
-            }
-        }
-        return foundIndex;
-    }
-
-    private showStatusChart() {
-        new Chart("ticketsByStatusChart", {
-            type: "pie",
-            data: {
-                labels: this.countByStatusLabels,
-                datasets: [{
-                    data: this.countByStatusDatapoints,
-                    backgroundColor: this.chartColors
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                }
-            }
-        });
     }
 
     public showTicketComments(ticket: Ticket) {
@@ -197,6 +106,10 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
         }).catch((err) => {
             console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments: " + err);
         });
+    }
+
+    public redirectToDevicePage(deviceId: string): void {
+        window.open("/apps/devicemanagement/index.html#/device/"+deviceId+"/device-info", "_blank");
     }
 
 }

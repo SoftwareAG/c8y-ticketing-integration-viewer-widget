@@ -10,7 +10,6 @@ import { ReportsModule } from "@c8y/ngx-components/reports";
 import { SensorPhoneModule } from "@c8y/ngx-components/sensor-phone";
 import { CumulocityTicketingIntegrationViewerWidget } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.component';
 import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-ticketing-integration-viewer-widget/c8y-ticketing-integration-viewer-widget.config.component';
-import { ChartsModule } from "ng2-charts";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { TicketCommentModal } from "./src/c8y-ticketing-integration-viewer-widget/modal/ticket-comment-modal.component";
 import { ModalModule } from "ngx-bootstrap/modal";
@@ -28,7 +27,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
         CockpitDashboardModule,
         SensorPhoneModule,
         UpgradeModule,
-        ChartsModule,
         PaginationModule,
         ModalModule
   ],

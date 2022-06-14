@@ -39,13 +39,10 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
                 deviceId: true,
                 subject: true,
                 priority: true,
-                comments: true
+                comments: true,
+                owner: true
             },
             pageSize: 1
-        },
-        chart: {
-            show: true,
-            colors: ["#1776bf"]
         }
     };
 
@@ -63,23 +60,9 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
            console.log("Ticketing Integration Viewer Widget Config - ngOnInit(): " + e);
         }
     }
-
-    public addChartColor(): void {
-        this.widgetConfig.chart.colors.push("#1776bf");
-        this.updateConfig();
-    }
-
-    public removeChartColor(): void {
-        this.widgetConfig.chart.colors.pop();
-        this.updateConfig();
-    }
     
     public updateConfig() {
         _.set(this.config, 'customwidgetdata', this.widgetConfig);
-    }
-
-    trackByFn(index, item) {
-        return index;  
     }
 
     ngOnDestroy(): void {

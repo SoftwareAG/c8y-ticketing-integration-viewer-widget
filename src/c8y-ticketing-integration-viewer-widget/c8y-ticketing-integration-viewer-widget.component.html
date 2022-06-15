@@ -23,8 +23,8 @@
                         <td data-label="Ticket id" *ngIf="config.customwidgetdata.table.showColumns.ticketId">{{t.id}}</td>
                         <td data-label="Subject" *ngIf="config.customwidgetdata.table.showColumns.subject">{{t.subject}}</td>
                         <td data-label="Description" *ngIf="config.customwidgetdata.table.showColumns.description">{{t.description}}</td>
-                        <td data-label="Creation date" *ngIf="config.customwidgetdata.table.showColumns.creationDate">{{t.creationDate}}</td>
-                        <td data-label="Last update date" *ngIf="config.customwidgetdata.table.showColumns.lastUpdateDate">{{t.lastUpdateDate}}</td>
+                        <td data-label="Creation date" *ngIf="config.customwidgetdata.table.showColumns.creationDate">{{t.creationDate | date: 'dd MMM yyyy, HH:mm:ss'}}</td>
+                        <td data-label="Last update date" *ngIf="config.customwidgetdata.table.showColumns.lastUpdateDate">{{t.lastUpdateDate | date: 'dd MMM yyyy, HH:mm:ss'}}</td>
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.status">{{t.status}}</td>
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.priority">{{t.priority}}</td>
                         <td data-label="Status" *ngIf="config.customwidgetdata.table.showColumns.owner">{{t.owner}}</td>

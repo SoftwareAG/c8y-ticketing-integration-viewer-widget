@@ -27,10 +27,11 @@ import { HttpClientModule } from "@angular/common/http";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { TicketCommentModal } from "./modal/ticket-comment-modal.component";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { DecodeHtmlPipe } from "./pipe/DecodeHtmlPipe";
 
 @NgModule({
     imports: [CoreModule, HttpClientModule, PaginationModule, ModalModule],
-    declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
+    declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal, DecodeHtmlPipe],
     entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
     providers: [
         {

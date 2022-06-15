@@ -13,24 +13,25 @@ import { CumulocityTicketingIntegrationViewerWidgetConfig } from './src/c8y-tick
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { TicketCommentModal } from "./src/c8y-ticketing-integration-viewer-widget/modal/ticket-comment-modal.component";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { DecodeHtmlPipe } from "./src/c8y-ticketing-integration-viewer-widget/pipe/DecodeHtmlPipe";
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-        RouterModule.forRoot(),
-        NgRouterModule.forRoot([...UPGRADE_ROUTES], { enableTracing: false, useHash: true }),
-        CoreModule.forRoot(),
-        AssetsNavigatorModule,
-        ReportsModule,
-        NgUpgradeModule,
-        DashboardUpgradeModule,
-        CockpitDashboardModule,
-        SensorPhoneModule,
-        UpgradeModule,
-        PaginationModule,
-        ModalModule
+    RouterModule.forRoot(),
+    NgRouterModule.forRoot([...UPGRADE_ROUTES], { enableTracing: false, useHash: true }),
+    CoreModule.forRoot(),
+    AssetsNavigatorModule,
+    ReportsModule,
+    NgUpgradeModule,
+    DashboardUpgradeModule,
+    CockpitDashboardModule,
+    SensorPhoneModule,
+    UpgradeModule,
+    PaginationModule,
+    ModalModule
   ],
-  declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
+  declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal, DecodeHtmlPipe],
   entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
   providers: [{
     provide: HOOK_COMPONENTS,

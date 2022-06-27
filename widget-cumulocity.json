@@ -3,7 +3,7 @@
     "contextPath": "c8y-ticketing-integration-viewer-widget",
     "key": "c8y-ticketing-integration-viewer-widget-key",
     "contentSecurityPolicy": "default-src 'self'",
-    "description": "Configure to.",
+    "description": "To view tickets from ticketing platform using Ticketing Integration microservice.",
     "icon": {
         "class": "fa fw fa-database"
     },

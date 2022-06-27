@@ -16,8 +16,12 @@ This widget allows...
 2. Click on `Add widget`.
 3. Choose `Ticket Integration Viewer` widget.
 4. `Title` is the title of widget. Provide a relevant name. You may choose to hide this. Go to `Appearance` tab and choose `Hidden` under `Widget header style`.
-5. Click `Save` to add the widget on the dashboard.
-6. In case you see unexpected results on the widget, refer to browser console to see if there are error logs.
+5. Choose `Target assets or devices` to view tickets for that specific device or leave unselected to view all tickets.
+6. Select or unselect respective table columns in `Show columns` to be shown in table.
+7. `Max total tickets` is total number of tickets to be retrieved from ticketing platform.
+8. `Page size` is total number of tickets to shown at once in a table.
+9. Click `Save` to add the widget on the dashboard.
+10. In case you see unexpected results on the widget, refer to browser console to see if there are error logs.
 
 ### Development - to do the enhancements and testing locally
 1. Clone the repository on local machine using `git clone https://github.com/SoftwareAG/c8y-ticketing-integration-viewer-widget.git`.

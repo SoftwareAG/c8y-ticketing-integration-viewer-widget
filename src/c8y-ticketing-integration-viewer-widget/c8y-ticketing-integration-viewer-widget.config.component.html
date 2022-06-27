@@ -89,8 +89,14 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
+                        <label>Maximum total tickets</label>
+                        <input type="number" class="form-control" required [(ngModel)]="widgetConfig.maxTickets" min="1" max="2000" (change)="updateConfig()" />
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
                         <label>Page size</label>
-                        <input type="number" class="form-control" [(ngModel)]="widgetConfig.table.pageSize" (change)="updateConfig()" />
+                        <input type="number" class="form-control" required [(ngModel)]="widgetConfig.table.pageSize" min="1" (change)="updateConfig()" />
                     </div>
                 </div>
             </div>

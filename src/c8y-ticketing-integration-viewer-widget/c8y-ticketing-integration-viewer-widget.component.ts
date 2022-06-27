@@ -20,7 +20,6 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { IFetchResponse } from '@c8y/client';
 import { AlertService } from '@c8y/ngx-components';
 import { FetchClient } from '@c8y/ngx-components/api';
@@ -30,6 +29,16 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { TicketCommentModal } from './modal/ticket-comment-modal.component';
 import { Ticket } from './ticket';
 
+export interface TPConfig {
+    name: string;
+    username: string;
+    password: string;
+    tenantUrl: string;
+    accountId: string;
+    ticketRecordTemplateUrl: string;
+    alarmSubscription: boolean;
+    autoAcknowledgeAlarm: boolean;
+}
 
 @Component({
     selector: "lib-c8y-ticketing-integration-viewer-widget",
@@ -44,6 +53,10 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
     public paginatedTickets: Ticket[] = [];
     public totalTicketsPerPage: number = 1;
 
+    public maxTickets: number = 100;
+
+    public tpConfig: TPConfig;
+
     constructor(private fetchClient: FetchClient, private alertService: AlertService, public modalService: BsModalService) {
     }
 
@@ -54,31 +67,33 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
                 deviceId = this.config.device.id;
             }
             this.totalTicketsPerPage = this.config.customwidgetdata.table.pageSize;
+            this.maxTickets = this.config.customwidgetdata.maxTickets;
             this.fetchTickets(deviceId);
+            this.getTPConfig();
         } catch(e) {
-            console.log("Ticketing Integration Viewer Widget - ngOnInit() "+e);
+            this.alertService.danger("Ticketing Integration Viewer Widget - ngOnInit()", e);
         }
     }
 
     private fetchTickets(deviceId?: string): void {
-        let url: string = "/service/ticketing/tickets";
+        let url: string = "/service/ticketing/tickets?pageSize="+this.maxTickets;
         if(deviceId !== undefined && deviceId !== null && deviceId !== "") {
-            url = url + "?deviceId="+deviceId;
+            url = url + "&deviceId="+deviceId;
         }
         let fetchResp: Promise<IFetchResponse> = this.fetchClient.fetch(url);
         fetchResp.then((resp: IFetchResponse) => {
             if(resp.status === 200) {
                 resp.json().then((jsonResp) => {
-                    this.tickets = jsonResp;
-                    this.paginatedTickets = jsonResp.slice(0, this.totalTicketsPerPage);
+                    this.tickets = jsonResp.records;
+                    this.paginatedTickets = this.tickets.slice(0, this.totalTicketsPerPage);
                 }).catch((err) => {
-                    console.log("Ticketing Integration Viewer Widget - "+err);
+                    this.alertService.danger("Ticketing Integration Viewer Widget - Unable to get tickets.", err);
                 });
             } else {
-                console.log("Ticketing Integration Viewer Widget - "+resp.status);
+                this.alertService.danger("Ticketing Integration Viewer Widget - Unable to get tickets.", resp.status.toString());
             }
         }).catch((err) => {
-            console.log("Ticketing Integration Viewer Widget - "+err);
+            this.alertService.danger("Ticketing Integration Viewer Widget - Unable to get tickets.", err);
         });
     }
 
@@ -95,17 +110,34 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
             if(resp.status === 200) {
                 resp.json().then((jsonResp) => {
                     let message = {
-                        comments: jsonResp
+                        comments: jsonResp.records
                     };
                     this.modalService.show(TicketCommentModal, { class: 'c8y-wizard', initialState: {message} });
                 }).catch((err) => {
-                    console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments JSON response: " + err);
+                    this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch ticket comments JSON response", err);
                 });
             } else {
-                console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments: " + resp.status);
+                this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch ticket comments.", resp.status.toString());
             }
         }).catch((err) => {
-            console.log("Ticketing Integration Viewer Widget - Unable to fetch ticket comments: " + err);
+            this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch ticket comments.", err);
+        });
+    }
+
+    private getTPConfig(): void {
+        let fetchResp: Promise<IFetchResponse> = this.fetchClient.fetch("/service/ticketing/tpconfig");
+        fetchResp.then((resp: IFetchResponse) => {
+            if(resp.status === 200) {
+                resp.json().then((jsonResp) => {
+                    this.tpConfig = jsonResp.record;
+                }).catch((err) => {
+                    this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch Ticketing Platform Configuration.", err);
+                });
+            } else {
+                this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch Ticketing Platform Configuration." + resp.status.toString());    
+            }
+        }).catch((err) => {
+            this.alertService.danger("Ticketing Integration Viewer Widget - Unable to fetch Ticketing Platform Configuration.", err);
         });
     }
 

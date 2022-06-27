@@ -28,11 +28,27 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
 import { TicketCommentModal } from "./modal/ticket-comment-modal.component";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { DecodeHtmlPipe } from "./pipe/DecodeHtmlPipe";
+import { TicketIdReplacementPipe } from "./pipe/TicketIdReplacementPipe";
 
 @NgModule({
-    imports: [CoreModule, HttpClientModule, PaginationModule, ModalModule],
-    declarations: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal, DecodeHtmlPipe],
-    entryComponents: [CumulocityTicketingIntegrationViewerWidget, CumulocityTicketingIntegrationViewerWidgetConfig, TicketCommentModal],
+    imports: [
+        CoreModule,
+        HttpClientModule,
+        PaginationModule,
+        ModalModule
+    ],
+    declarations: [
+        CumulocityTicketingIntegrationViewerWidget,
+        CumulocityTicketingIntegrationViewerWidgetConfig,
+        TicketCommentModal,
+        DecodeHtmlPipe,
+        TicketIdReplacementPipe
+    ],
+    entryComponents: [
+        CumulocityTicketingIntegrationViewerWidget,
+        CumulocityTicketingIntegrationViewerWidgetConfig,
+        TicketCommentModal
+    ],
     providers: [
         {
             provide: HOOK_COMPONENTS,
@@ -40,7 +56,7 @@ import { DecodeHtmlPipe } from "./pipe/DecodeHtmlPipe";
             useValue: {
                 id: "global.presales.c8y.ticketing.integration.viewer.widget",
                 label: "Ticketing Integration Viewer",
-                description: "To configure",
+                description: "To view tickets from ticketing platform using Ticketing Integration microservice.",
                 component: CumulocityTicketingIntegrationViewerWidget,
                 configComponent: CumulocityTicketingIntegrationViewerWidgetConfig,
                 previewImage: require("@widget-assets/img-preview.png"),

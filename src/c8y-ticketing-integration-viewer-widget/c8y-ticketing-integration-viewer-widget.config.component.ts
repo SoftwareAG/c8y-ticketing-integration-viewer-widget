@@ -16,6 +16,7 @@
 * limitations under the License. 
  */
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { AlertService } from '@c8y/ngx-components';
 import * as _ from 'lodash';
 
 @Component({
@@ -42,11 +43,12 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
                 comments: true,
                 owner: true
             },
-            pageSize: 1
-        }
+            pageSize: 10
+        },
+        maxTickets: 100
     };
 
-    constructor() {}
+    constructor(private alertService: AlertService) {}
 
     ngOnInit(): void {
         try {
@@ -57,7 +59,7 @@ export class CumulocityTicketingIntegrationViewerWidgetConfig implements OnInit,
                 _.set(this.config, 'customwidgetdata', this.widgetConfig);
             }
         } catch(e) {
-           console.log("Ticketing Integration Viewer Widget Config - ngOnInit(): " + e);
+           this.alertService.danger("Ticketing Integration Viewer Widget Config - ngOnInit()", e);
         }
     }
     

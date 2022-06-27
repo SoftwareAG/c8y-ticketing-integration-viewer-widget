@@ -20,7 +20,7 @@
                 </thead>
                 <tbody>                
                     <tr *ngFor="let t of paginatedTickets;">
-                        <td data-label="Ticket id" *ngIf="config.customwidgetdata.table.showColumns.ticketId">{{t.id}}</td>
+                        <td data-label="Ticket id" *ngIf="config.customwidgetdata.table.showColumns.ticketId"><a target="_blank" href="{{tpConfig?.ticketRecordTemplateUrl | ReplaceTicketId : t.id}}">{{t.id}}</a></td>
                         <td data-label="Subject" *ngIf="config.customwidgetdata.table.showColumns.subject">{{t.subject}}</td>
                         <td data-label="Description" *ngIf="config.customwidgetdata.table.showColumns.description">{{t.description}}</td>
                         <td data-label="Creation date" *ngIf="config.customwidgetdata.table.showColumns.creationDate">{{t.creationDate | date: 'dd MMM yyyy, HH:mm:ss'}}</td>

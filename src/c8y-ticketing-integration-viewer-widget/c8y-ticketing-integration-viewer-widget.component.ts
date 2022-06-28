@@ -145,4 +145,12 @@ export class CumulocityTicketingIntegrationViewerWidget implements OnInit {
         window.open("/apps/devicemanagement/index.html#/device/"+deviceId+"/device-info", "_blank");
     }
 
+    public refreshTickets() {
+        let deviceId = "";
+        if(this.config.device !== undefined) {
+            deviceId = this.config.device.id;
+        }
+        this.fetchTickets(deviceId);
+    }
+
 }

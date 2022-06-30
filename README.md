@@ -1,6 +1,6 @@
 # Ticketing Integration Viewer Widget for Cumulocity IoT
 
-This widget allows...
+This widget allows to view tickets from the configured Ticketing Platform using Ticketing Integration microservice.
 
 ![Preview](src/c8y-ticketing-integration-viewer-widget/assets/img-preview.png)
 
